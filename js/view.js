@@ -1,95 +1,86 @@
-//window.onload = main;
+function putElement() {
+    canvas = newElement("canvas", document.body, window.innerWidth - 200, window.innerHeight - 50, "", 30, "", {"position":"absolute", "background":"#D0D0D0"});
+    document.body.appendChild(canvas);
+    
+    context = canvas.getContext("2d");
+
+    
+
+   var tempo = new SpriteSheet("img/load.png", 4, 12);
+    image = tempo[0];
+    console.log(tempo[1] +  " " + tempo[2]);
+
+    on(image, "load", resizeSprite)
+
+
 /*
-https://developer.mozilla.org/fr/docs/Web/API/File
-https://developer.mozilla.org/en-US/docs/Web/API/FileReader/onload
-https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
-*/
+    image = document.createElement("img");
+    
+    var input = newElement("input", document.body, "", "", "", "", "", "", {"position":"absolute"});
+    input.type = "file";
+    input.accept = ".png, .jpg, .jpeg, .gif";
 
-var inpt;
-var cvs; // Canvas (Le support du contexte ctx de la fonction make())
-var ctx; // Contexte du convas (L'interieur du canvas)
-var fileList;
-var img; // Contient la balise <img>
-
-
-
-
-function make() {
-
-    img = document.createElement("img");
-
-    inpt = document.createElement("input");
-    inpt.style.position = "absolute";
-    inpt.style.left = "0" + px;
-    inpt.style.top = "0" + px;
-    inpt.type = "file";
-    inpt.id = "image";
-    inpt.name = "imageTest";
-    inpt.accept = ".png, .jpg, .jpeg, .gif";
-
-    inpt.addEventListener("change", function() {
-	fileList = inpt.files;
-
+    on(input, "change",function() {
+	var fileList = input.files;
 	for(var i = 0; i < fileList.length; i++) {
-	    img.title = fileList.name;
-	    img.src = window.URL.createObjectURL(fileList[i]);
-	    img.addEventListener("load", function() {
-		ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
+	    image.title = fileList.name;
+	    image.src = window.URL.createObjectURL(fileList[i]);
+	    image.id = "image" + i;
 
-	    });
+	    on(image, "load", resizeSprite)
+	    
 	}
 
     });
-    
-    
-    document.body.appendChild(inpt);
+*/
 
-    cvs = document.createElement("canvas");
-    cvs.style.position = "absolute";
-    cvs.style.width = "800" + px;
-    cvs.style.height = "600" + px;
-    cvs.style.top = "30" + px;
-    document.body.appendChild(cvs);
-    
-    ctx = cvs.getContext('2d');
-
-    var fd = nouveau("fieldset", document.body, 300, 300, 810, 30, "", "", "");
-
-    var label = nouveau("label", document.body, "", "", 20, 40, "", "", "");
-    label.appendChild(document.createTextNode("Luminosité"));
-    fd.appendChild(label);
-
-    var slide = nouveau("input", document.body, "", "", 100, 40, "", "", "");
-    slide.type = "range";
-    slide.min = 0;
-    slide.max = 100;
-    slide.value = 50; // Valeur de base
-    on(slide, "mousedown", function() {
-	ctx = img.style.filter = "brigthness("+ slide.value + "%)";
-    });
-    fd.appendChild(slide);
-
-    var label1 = nouveau("label", document.body, "", "", 20, 140, "", "", "");
-    label1.appendChild(document.createTextNode("Contraste"));
-    fd.appendChild(label1);
-
-    var slide1 = nouveau("input", document.body, "", "", 100, 140, "", "", "");
-    slide1.type = "range";
-    slide1.min = 0;
-    slide1.max = 100;
-    slide1.value = 50;
-    fd.appendChild(slide1);
-
-    var label2 = nouveau("label", document.body, "", "", 20, 240, "", "", "");
-    label2.appendChild(document.createTextNode("Saturation"));
-    fd.appendChild(label2);
-
-    var slide2 = nouveau("input", document.body, "", "", 100, 240, "", "", "");
-    slide2.type = "range";
-    slide2.min = 0;
-    slide2.max = 100;
-    slide2.value = 50;
-    fd.appendChild(slide2);
-    
-    document.body.appendChild(fd);
 }
+
+/*
+function resizeSprite() {
+        if (image.width > canvas.width || image.height > canvas.height) {
+            var coefficientDeReduction = Math.max(image.width / canvas.width, image.height / canvas.height);
+            Math.round(image.width /= coefficientDeReduction);
+            Math.round(image.height /= coefficientDeReduction); 
+        }
+        //context.drawImage(image, x, y, 57.5, 57.5, 0, 0, image.width, image.height);
+        frameloop();
+        }*/
+
+
+/*
+function putElement() {
+    canvas = newElement("canvas", document.body, window.innerWidth - 200, window.innerHeight - 50, "", 30, "", {"position":"absolute", "background":"#D0D0D0"});
+    document.body.appendChild(canvas);
+    
+    context = canvas.getContext("2d");
+    image = document.createElement("img");
+
+    //var fieldset = nouveau
+    
+    var input = newElement("input", document.body, "", "", "", "", "", {"position":"absolute"});
+    input.type = "file";
+    input.accept = ".png, .jpg, .jpeg, .gif";
+
+    input.addEventListener("change", function() {
+    var fileList = input.files;
+    for(var i = 0; i < fileList.length; i++) {
+        image.title = fileList.name;
+        image.src = window.URL.createObjectURL(fileList[i]);
+        image.id = "image" + i;
+        //image.src = "img/loading-sprite.png";
+        on(image, "load", function() {
+        if (image.width > canvas.width || image.height > canvas.height) {
+            var coefficientDeReduction = Math.max(image.width / canvas.width, image.height / canvas.height);
+            Math.round(image.width /= coefficientDeReduction);
+            Math.round(image.height /= coefficientDeReduction); 
+        }
+        frameloop();
+        console.log("longueur " + image.width + " hauteur : " + image.height)
+        })
+        
+    }
+
+    });
+}
+*/
