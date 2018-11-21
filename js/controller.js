@@ -4,38 +4,33 @@ class SpriteSheet {
         this.source = source;
         this.element.src = this.source;
 
-        //on(this.element, "load", resizeSprite(this.element));
         this.numberRow = numberRow;
         this.numberColumn = numberColumn;
-	/*
-        this.spriteSize = this.spriteSize(numberRow, numberColumn);
-        this.spriteWidth = this.spriteSize[0];
-        this.spriteHeight = this.spriteSize[1];*/
 
-        /* COMPORTEMENT BIZARRE
-         * POURQUOI FAUT IL METTRE UN RETURN DANS UN CONSTRUCTEUR ??.
-         */
-        //return this.element;
-	return [this.element, this.numberRow, this.numberColumn]
+        this.element = resizeSprite(this.element)
+
+        /*this.sizeSprite = sizeSprite(this.element, numberRow, numberColumn);
+        this.spriteWidth = this.sizeSprite[0];
+        this.spriteHeight = this.sizeSprite[1];*/
     }
-
-    /*spriteSize(numberRow, numberColumn) {
-        var spriteWidth = this.element.width / numberRow;
-        var spriteHeight = this.element.height / numberColumn;
-        return [spriteWidth, spriteHeight];
-    }*/
-
 }
 
-function resizeSprite() {
+function resizeSprite(image) {
+	console.log(image + image)
         if (image.width > canvas.width || image.height > canvas.height) {
 		    var coefficientDeReduction = Math.max(image.width / canvas.width, image.height / canvas.height);
 		    Math.round(image.width /= coefficientDeReduction);
 		    Math.round(image.height /= coefficientDeReduction); 
 		}
-        frameloop();
+        //frameloop(image);
+        return image;
 }
 
+function sizeSprite(image, numberRow, numberColumn) {
+	var spriteWidth = image.width / numberRow;
+	var spriteHeight = image.height / numberColumn;
+	return [spriteWidth, spriteHeight];
+}
 
 
 /**
@@ -83,7 +78,7 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
 
 function move() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(image, x, y, 57.5, 57.5, 0, 0, image.width, image.height);
+    context.drawImage(image, x, y, 57.5, 57.5, 0, 0, /*image.width*/ 50, /*image.height*/ 50);
 
     if (ligne == nbLigne && colonne == nbColonne) {
         ligne = 1;
@@ -105,8 +100,21 @@ function move() {
    
 }
 
+var tmp; 
+var t = 0; 
+
 function frameloop() {
-    move();
+	/*Pour je ne sais quelle raison, apres la 1er boucle, 
+	 *la variable image devient du type object au type number 
+	 */ 
+
+	if (t == 1) { 
+		image = tmp; 
+	} 
+	move(); 
+
+	t = 1; 
+	tmp = image
     /*on(canvas, "resize", function() {
         console.log("w : "+window.innerWidth + " h : " +window.innerHeight)
         canvas.style.width = window.innerWidth;

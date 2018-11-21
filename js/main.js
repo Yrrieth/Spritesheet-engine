@@ -14,8 +14,9 @@ window.onload = main;
 var canvas;
 var context;
 var image;
-var image2;
-var image3
+var tempo;
+
+var imageInput;
 
 var x = 0;
 var y = 0;
