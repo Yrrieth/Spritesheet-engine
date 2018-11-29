@@ -4,14 +4,17 @@ function putElement() {
     
     context = canvas.getContext("2d");
 
-    tempo = new SpriteSheet("img/load.png", 4, 12);
-    //console.log(tempo.element +  " " + tempo.numberRow);
-    
-    image = tempo.element
+    load = new SpriteSheet("img/load.png", 4, 12, 0, 0);
+    loadImage = load.image;
 
-    //on(image, "load", resizeSprite)
-    on(image, "load", frameloop)
-
+    on(loadImage, "load", function() {
+        load.imageWidth = this.naturalWidth; // the "this" here, refers to "loadImage". The .imageWidth and .imageHeight property can only be obtained after the image have been loaded,
+        load.imageHeight = this.naturalHeight; // otherwise, the width and height will be 0
+        var loadSpriteSize = spriteSize(load, load.numberRow, load.numberColumn);
+        load.spriteWidth = loadSpriteSize.spriteWidth;
+        load.spriteHeight = loadSpriteSize.spriteHeight;
+        frameloop();
+    });
 
 
     imageInput = document.createElement("img");
@@ -29,6 +32,4 @@ function putElement() {
     	    on(imageInput, "load", frameloop)
     	}
     });
-
-
 }
