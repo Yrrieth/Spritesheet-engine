@@ -13,8 +13,10 @@ window.onload = main;
 
 var canvas;
 var context;
-var image;
-var tempo;
+
+var loadImage;
+var imageWidth;
+var imageHeight;
 
 var imageInput;
 
