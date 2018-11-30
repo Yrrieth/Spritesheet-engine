@@ -14,6 +14,7 @@ class SpriteSheet {
         this.spriteWidth;
         this.spriteHeight;
 
+        // A frame is 1 image of a spritesheet
         this.frameX;
         this.frameY;
         this.coordinateFrameX;
@@ -24,16 +25,17 @@ class SpriteSheet {
 function getSizeAfterLoad(imageObject) {
     imageObject.imageWidth = imageObject.image.naturalWidth; // the "this" here, refers to "loadImage". The .imageWidth and .imageHeight property can only be obtained after the image have been loaded,
     imageObject.imageHeight = imageObject.image.naturalHeight; // otherwise, the width and height will be 0
+    console.log(imageObject.image.naturalWidth)
     console.log(imageObject.imageWidth + " " + imageObject.imageHeight);
     var loadSpriteSize = spriteSize(load, imageObject.numberRow, imageObject.numberColumn);
     console.log(imageObject.numberRow + " " + imageObject.numberColumn);
     imageObject.spriteWidth = loadSpriteSize.spriteWidth;
     imageObject.spriteHeight = loadSpriteSize.spriteHeight;
     console.log(imageObject.spriteWidth + " " + imageObject.spriteHeight);
-    load.frameX = 1;
-    load.frameY = 1;
-    load.coordinateFrameX = 0;
-    load.coordinateFrameY = 0;
+    imageObject.frameX = 1;
+    imageObject.frameY = 1;
+    imageObject.coordinateFrameX = 0;
+    imageObject.coordinateFrameY = 0;
     frameloop();
 }
 

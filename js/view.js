@@ -4,17 +4,30 @@ function putElement() {
     
     context = canvas.getContext("2d");
 
-    load = new SpriteSheet("img/load.png", 4, 12, 0, 0);
-    loadImage = load.image;
+    //load = new SpriteSheet("img/load.png", 4, 12, 0, 0);
+    //load = new SpriteSheet("img/explosion-sprite.png", 3, 5, 0, 0);
+    load = new SpriteSheet("img/toon.png", 5, 10, 0, 0);
+    //load = new SpriteSheet("img/FDHsu.png", 2, 3, 0, 0);
 
-    on(loadImage, "load", function() {
-        load.imageWidth = this.naturalWidth; // the "this" here, refers to "loadImage". The .imageWidth and .imageHeight property can only be obtained after the image have been loaded,
-        load.imageHeight = this.naturalHeight; // otherwise, the width and height will be 0
+    on(load.image, "load", 
+        function() {
+        load.imageWidth = load.image.naturalWidth; // the "this" here, refers to "loadImage". The .imageWidth and .imageHeight property can only be obtained after the image have been loaded,
+        load.imageHeight = load.image.naturalHeight; // otherwise, the width and height will be 0
+        console.log(load.image.naturalWidth)
+        console.log(load.imageWidth + " " + load.imageHeight);
         var loadSpriteSize = spriteSize(load, load.numberRow, load.numberColumn);
+        console.log(load.numberRow + " " + load.numberColumn);
         load.spriteWidth = loadSpriteSize.spriteWidth;
         load.spriteHeight = loadSpriteSize.spriteHeight;
+        console.log(load.spriteWidth + " " + load.spriteHeight)
+        load.frameX = 1;
+        load.frameY = 1;
+        load.coordinateFrameX = 0;
+        load.coordinateFrameY = 0;
         frameloop();
-    });
+    }
+        //getSizeAfterLoad(load)
+    );
 
 
     imageInput = document.createElement("img");
