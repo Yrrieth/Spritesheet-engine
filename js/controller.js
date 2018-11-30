@@ -13,17 +13,38 @@ class SpriteSheet {
 
         this.spriteWidth;
         this.spriteHeight;
+
+        this.frameX;
+        this.frameY;
+        this.coordinateFrameX;
+        this.coordinateFrameY;
     }
 }
 
+function getSizeAfterLoad(imageObject) {
+    imageObject.imageWidth = imageObject.image.naturalWidth; // the "this" here, refers to "loadImage". The .imageWidth and .imageHeight property can only be obtained after the image have been loaded,
+    imageObject.imageHeight = imageObject.image.naturalHeight; // otherwise, the width and height will be 0
+    console.log(imageObject.imageWidth + " " + imageObject.imageHeight);
+    var loadSpriteSize = spriteSize(load, imageObject.numberRow, imageObject.numberColumn);
+    console.log(imageObject.numberRow + " " + imageObject.numberColumn);
+    imageObject.spriteWidth = loadSpriteSize.spriteWidth;
+    imageObject.spriteHeight = loadSpriteSize.spriteHeight;
+    console.log(imageObject.spriteWidth + " " + imageObject.spriteHeight);
+    load.frameX = 1;
+    load.frameY = 1;
+    load.coordinateFrameX = 0;
+    load.coordinateFrameY = 0;
+    frameloop();
+}
+
 function resizeSprite(image) {
-        if (image.width > canvas.width || image.height > canvas.height) {
-		    var coefficientDeReduction = Math.max(image.width / canvas.width, image.height / canvas.height);
-		    Math.round(image.width /= coefficientDeReduction);
-		    Math.round(image.height /= coefficientDeReduction); 
-		}
-        //frameloop(image);
-        return image;
+    if (image.width > canvas.width || image.height > canvas.height) {
+	    var coefficientDeReduction = Math.max(image.width / canvas.width, image.height / canvas.height);
+	    Math.round(image.width /= coefficientDeReduction);
+	    Math.round(image.height /= coefficientDeReduction); 
+	}
+    //frameloop(image);
+    return image;
 }
 
 /**
@@ -83,29 +104,29 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
 
 function move() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(loadImage, x, y, load.spriteWidth, load.spriteHeight, 0, 0, /*canvas.width*/ 50, /*canvas.height*/ 50);
+    context.drawImage(load.image, load.coordinateFrameX, load.coordinateFrameY, load.spriteWidth, load.spriteHeight, 0, 0, /*canvas.width*/ 50, /*canvas.height*/ 50);
 
-    if (ligne == nbLigne && colonne == nbColonne) {
-        ligne = 1;
-        colonne = 1;
-        x = 0;
-        y = 0;
+    if (load.frameX == load.numberRow && load.frameY == load.numberColumn) {
+        load.frameX = 1;
+        load.frameY = 1;
+        load.coordinateFrameX = 0;
+        load.coordinateFrameY = 0;
     }
-    
-    if (colonne < nbColonne) {
-        colonne++;
-        x += dx;
+
+    if (load.frameY < load.numberColumn) {
+        load.frameY++;
+        load.coordinateFrameX += load.spriteWidth;
     } else {
-        ligne++;
-        y += dy;
-        colonne = 1;
-        x = 0;
+        load.frameX++;
+        load.coordinateFrameY += load.spriteHeight;
+        load.frameY = 1;
+        load.coordinateFrameX = 0;
     }
-   
 }
 
 function frameloop() {
-	move(); 
+    setTimeout(function() {
+	   move(); 
 
     /*on(canvas, "resize", function() {
         console.log("w : "+window.innerWidth + " h : " +window.innerHeight)
@@ -113,6 +134,7 @@ function frameloop() {
         canvas.style.height = window.innerHeight;
     });*/
 
-    requestAnimationFrame(frameloop);
+        requestAnimationFrame(frameloop);
+    }, 50); // 50 ms == 0,05 s
 }
 
