@@ -14,11 +14,21 @@ window.onload = main;
 // UTILISER REQUESTANIMATIONFRAME
 // https://www.kirupa.com/html5/animating_with_requestAnimationFrame.htm
 
+// ANIMATION
+// https://developer.mozilla.org/fr/docs/Tutoriel_canvas/Animations_basiques
+
+// LOAD IMAGES
+// https://www.html5canvastutorials.com/tutorials/html5-canvas-image-loader/
+
 var canvas;
 var context;
 
+var tmpImage;
+var first = 1;
+
 // Put here the variables image
 var load;
+var scott;
 
 var imageWidth;
 var imageHeight;

@@ -1,5 +1,5 @@
 class SpriteSheet {
-    constructor(source, numberRow, numberColumn, imageWidth, imageHeight) {
+    constructor(source, numberRow, numberColumn, sourceWidth, sourceHeight, destinationX, destinationY, destinationWidth, destinationHeight) {
         this.image = document.createElement("img");       
 
         this.source = source;
@@ -8,35 +8,47 @@ class SpriteSheet {
         this.numberRow = numberRow;
         this.numberColumn = numberColumn;
 
-        this.imageWidth = imageWidth;
-        this.imageHeight = imageHeight;
-
-        this.spriteWidth;
-        this.spriteHeight;
-
         // A frame is 1 image of a spritesheet
         this.frameX;
         this.frameY;
-        this.coordinateFrameX;
-        this.coordinateFrameY;
+        this.sourceX;
+        this.sourceY;
+        this.sourceWidth = sourceWidth;
+        this.sourceHeight = sourceHeight;
+
+        this.destinationX = destinationX;
+        this.destinationY = destinationY;
+        this.destinationWidth = destinationWidth;
+        this.destinationHeight = destinationHeight;
     }
 }
 
+/**
+ * @param getSizeAfterLoad :
+ *
+ * The sourceWidth and sourceHeight property can only be obtained after the image have been loaded,
+ * otherwise, the width and height will be 0.
+ * So, firstly, sourceWidth and sourceHeight will take the size of the image source then,
+ * those property will take the size of 1 sprite of the image after the function spriteSize() have been called.
+ */
+
 function getSizeAfterLoad(imageObject) {
-    imageObject.imageWidth = imageObject.image.naturalWidth; // the "this" here, refers to "loadImage". The .imageWidth and .imageHeight property can only be obtained after the image have been loaded,
-    imageObject.imageHeight = imageObject.image.naturalHeight; // otherwise, the width and height will be 0
-    console.log(imageObject.image.naturalWidth)
-    console.log(imageObject.imageWidth + " " + imageObject.imageHeight);
-    var loadSpriteSize = spriteSize(load, imageObject.numberRow, imageObject.numberColumn);
-    console.log(imageObject.numberRow + " " + imageObject.numberColumn);
-    imageObject.spriteWidth = loadSpriteSize.spriteWidth;
-    imageObject.spriteHeight = loadSpriteSize.spriteHeight;
-    console.log(imageObject.spriteWidth + " " + imageObject.spriteHeight);
-    imageObject.frameX = 1;
-    imageObject.frameY = 1;
-    imageObject.coordinateFrameX = 0;
-    imageObject.coordinateFrameY = 0;
-    frameloop();
+    on(imageObject.image, "load", function() {
+        imageObject.sourceWidth = imageObject.image.naturalWidth; 
+        imageObject.sourceHeight = imageObject.image.naturalHeight; 
+        console.log(imageObject.image)
+        console.log(imageObject.sourceWidth + " " + imageObject.sourceHeight);
+        var loadSpriteSize = spriteSize(imageObject, imageObject.numberRow, imageObject.numberColumn);
+        console.log(imageObject.numberRow + " " + imageObject.numberColumn);
+        imageObject.sourceWidth = loadSpriteSize.spriteWidth;
+        imageObject.sourceHeight = loadSpriteSize.spriteHeight;
+        console.log(imageObject.sourceWidth + " " + imageObject.sourceHeight + " taille");
+        imageObject.frameX = 1;
+        imageObject.frameY = 1;
+        imageObject.sourceX = 0;
+        imageObject.sourceY = 0;
+        //frameloop(imageObject);
+    });
 }
 
 function resizeSprite(image) {
@@ -57,8 +69,8 @@ function resizeSprite(image) {
  */
 
 function spriteSize(image, numberRow, numberColumn) {
-	var spriteWidth = image.imageWidth / numberColumn;
-	var spriteHeight = image.imageHeight / numberRow;
+	var spriteWidth = image.sourceWidth / numberColumn;
+	var spriteHeight = image.sourceHeight / numberRow;
 	return {
         spriteWidth : spriteWidth,
         spriteHeight : spriteHeight
@@ -104,39 +116,45 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
     return element;
 }
 
-function move() {
+function move(imageObject) {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(load.image, load.coordinateFrameX, load.coordinateFrameY, load.spriteWidth, load.spriteHeight, 0, 0, /*canvas.width*/ 50, /*canvas.height*/ 50);
+    context.save();
+    context.drawImage(imageObject.image, imageObject.sourceX, imageObject.sourceY, imageObject.sourceWidth, imageObject.sourceHeight, imageObject.destinationX, imageObject.destinationY, imageObject.destinationWidth, imageObject.destinationHeight);
+    console.log("aaaaaaaaaaaaaaaaaa")
 
-    if (load.frameX == load.numberRow && load.frameY == load.numberColumn) {
-        load.frameX = 1;
-        load.frameY = 1;
-        load.coordinateFrameX = 0;
-        load.coordinateFrameY = 0;
+    if (imageObject.frameX == imageObject.numberRow && imageObject.frameY == imageObject.numberColumn) {
+        imageObject.frameX = 1;
+        imageObject.frameY = 1;
+        imageObject.sourceX = 0;
+        imageObject.sourceY = 0;
     }
 
-    if (load.frameY < load.numberColumn) {
-        load.frameY++;
-        load.coordinateFrameX += load.spriteWidth;
+    if (imageObject.frameY < imageObject.numberColumn) {
+        imageObject.frameY++;
+        imageObject.sourceX += imageObject.sourceWidth;
     } else {
-        load.frameX++;
-        load.coordinateFrameY += load.spriteHeight;
-        load.frameY = 1;
-        load.coordinateFrameX = 0;
+        imageObject.frameX++;
+        imageObject.sourceY += imageObject.sourceHeight;
+        imageObject.frameY = 1;
+        imageObject.sourceX = 0;
     }
+    context.restore();
 }
 
 function frameloop() {
     setTimeout(function() {
-	   move(); 
+        move(load);
+        //move(scott);
+        requestAnimationFrame(frameloop);
+    }, 50); // 50 ms == 0,05 s
+
+    
+    
 
     /*on(canvas, "resize", function() {
         console.log("w : "+window.innerWidth + " h : " +window.innerHeight)
         canvas.style.width = window.innerWidth;
         canvas.style.height = window.innerHeight;
     });*/
-
-        requestAnimationFrame(frameloop);
-    }, 50); // 50 ms == 0,05 s
 }
 
