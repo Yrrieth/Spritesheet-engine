@@ -20,6 +20,9 @@ window.onload = main;
 // LOAD IMAGES
 // https://www.html5canvastutorials.com/tutorials/html5-canvas-image-loader/
 
+// https://github.com/google/closure-compiler/wiki/Annotating-JavaScript-for-the-Closure-Compiler
+// Compilateur Javascript : YUI et CLOSURE
+
 var canvas;
 var context;
 

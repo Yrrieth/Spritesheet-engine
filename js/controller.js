@@ -116,12 +116,29 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
     return element;
 }
 
-function move(imageObject) {
+var frameAxisX = 2;
+var speed = 3;
+
+
+function animate(imageObject) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.save();
     context.drawImage(imageObject.image, imageObject.sourceX, imageObject.sourceY, imageObject.sourceWidth, imageObject.sourceHeight, imageObject.destinationX, imageObject.destinationY, imageObject.destinationWidth, imageObject.destinationHeight);
     console.log("aaaaaaaaaaaaaaaaaa")
 
+    on(document.body, "keydown", (event) => {
+        const touche = event.key;
+        if (touche == 'd') {
+            imageObject.destinationX += frameAxisX
+        }
+        if (touche == 'q') {
+            imageObject.destinationX -= frameAxisX
+        }
+        console.log("La touche appuyée est : " + touche + " destinationX : " + imageObject.destinationX)
+    })
+
+
+    // Reset everything
     if (imageObject.frameX == imageObject.numberRow && imageObject.frameY == imageObject.numberColumn) {
         imageObject.frameX = 1;
         imageObject.frameY = 1;
@@ -141,11 +158,16 @@ function move(imageObject) {
     context.restore();
 }
 
-function frameloop() {
+var raf;
+
+function frameloop(imageObject) {
     setTimeout(function() {
-        move(load);
-        //move(scott);
-        requestAnimationFrame(frameloop);
+        raf = requestAnimationFrame(frameloop);
+        //animate(imageObject);
+        //animate(scott);
+        animate(blob)
+        //animate(hit)
+        
     }, 50); // 50 ms == 0,05 s
 
     
