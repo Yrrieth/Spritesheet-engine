@@ -8,9 +8,9 @@ class SpriteSheet {
         this.numberRow = numberRow;
         this.numberColumn = numberColumn;
 
-        // A frame is 1 image of a spritesheet
-        this.frameX;
-        this.frameY;
+        // A sprite is 1 image of a spritesheet
+        this.spriteX;
+        this.spriteY;
         this.sourceX;
         this.sourceY;
         this.sourceWidth = sourceWidth;
@@ -24,7 +24,8 @@ class SpriteSheet {
 }
 
 /**
- * @param getSizeAfterLoad :
+ * @method getSizeAfterLoad :
+ * @param imageObject : the object SpriteSheet
  *
  * The sourceWidth and sourceHeight property can only be obtained after the image have been loaded,
  * otherwise, the width and height will be 0.
@@ -43,15 +44,15 @@ function getSizeAfterLoad(imageObject) {
         imageObject.sourceWidth = loadSpriteSize.spriteWidth;
         imageObject.sourceHeight = loadSpriteSize.spriteHeight;
         console.log(imageObject.sourceWidth + " " + imageObject.sourceHeight + " taille");
-        imageObject.frameX = 1;
-        imageObject.frameY = 1;
+        imageObject.spriteX = 1;
+        imageObject.spriteY = 1;
         imageObject.sourceX = 0;
         imageObject.sourceY = 0;
         //frameloop(imageObject);
     });
 }
 
-function resizeSprite(image) {
+/*function resizeSprite(image) {
     if (image.width > canvas.width || image.height > canvas.height) {
 	    var coefficientDeReduction = Math.max(image.width / canvas.width, image.height / canvas.height);
 	    Math.round(image.width /= coefficientDeReduction);
@@ -59,11 +60,11 @@ function resizeSprite(image) {
 	}
     //frameloop(image);
     return image;
-}
+}*/
 
 /**
  * @method spriteSize : calculate the size of 1 sprite from a spritesheet
- * @param image : the object spritesheet
+ * @param image : the object SpriteSheet
  * @param numberRow : 
  * @param numberColumn :
  */
@@ -78,7 +79,7 @@ function spriteSize(image, numberRow, numberColumn) {
 }
 
 /**
- * @method on : call an event
+ * @method on : useful function to use when we want to create events 
  * @param element : element which will receives an event 
  * @param type : type of event
  * @param callback : function which will be called when the event will be performed
@@ -116,67 +117,72 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
     return element;
 }
 
-var frameAxisX = 2;
-var speed = 3;
-
-
 function animate(imageObject) {
+    var moveSpeed = 1;
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.save();
     context.drawImage(imageObject.image, imageObject.sourceX, imageObject.sourceY, imageObject.sourceWidth, imageObject.sourceHeight, imageObject.destinationX, imageObject.destinationY, imageObject.destinationWidth, imageObject.destinationHeight);
-    console.log("aaaaaaaaaaaaaaaaaa")
-
-    on(document.body, "keydown", (event) => {
-        const touche = event.key;
-        if (touche == 'd') {
-            imageObject.destinationX += frameAxisX
-        }
-        if (touche == 'q') {
-            imageObject.destinationX -= frameAxisX
-        }
-        console.log("La touche appuyée est : " + touche + " destinationX : " + imageObject.destinationX)
-    })
-
 
     // Reset everything
-    if (imageObject.frameX == imageObject.numberRow && imageObject.frameY == imageObject.numberColumn) {
-        imageObject.frameX = 1;
-        imageObject.frameY = 1;
+    if (imageObject.spriteX == imageObject.numberRow && imageObject.spriteY == imageObject.numberColumn) {
+        imageObject.spriteX = 1;
+        imageObject.spriteY = 1;
         imageObject.sourceX = 0;
         imageObject.sourceY = 0;
     }
 
-    if (imageObject.frameY < imageObject.numberColumn) {
-        imageObject.frameY++;
+    if (imageObject.spriteY < imageObject.numberColumn) {
+        imageObject.spriteY++;
         imageObject.sourceX += imageObject.sourceWidth;
     } else {
-        imageObject.frameX++;
+        imageObject.spriteX++;
         imageObject.sourceY += imageObject.sourceHeight;
-        imageObject.frameY = 1;
+        imageObject.spriteY = 1;
         imageObject.sourceX = 0;
     }
-    context.restore();
+
+    on(document.body, "keypress", (event) => {
+        var touche = event.key;
+        console.log("La touche appuyée est : " + touche + " destinationX : " + imageObject.destinationX)
+        console.log(performance.now() / 1000)
+        if (touche == 'd') {
+            imageObject.destinationX += moveSpeed;
+        }
+        if (touche == 'q') {
+            imageObject.destinationX -= moveSpeed;
+        }
+    })
 }
 
-var raf;
+var raf = null; // requestAnimationFrame
+var hideFrame = 1; // variable boolean to have a animation at 30 fps
+var animationRunning = false // variable boolean used for the buttons
 
 function frameloop(imageObject) {
-    setTimeout(function() {
-        raf = requestAnimationFrame(frameloop);
-        //animate(imageObject);
-        //animate(scott);
-        animate(blob)
-        //animate(hit)
-        
-    }, 50); // 50 ms == 0,05 s
-
+    console.log("a")
+    hideFrame = 1 - hideFrame; // 1 then 0 at each loop : 1 - 1 = 0 ; 1 - 0 = 1
+    if (hideFrame == 0) {
+        animate(blob);
+    }
+    raf = requestAnimationFrame(frameloop)
     
-    
+    if (raf != null) {
+        animationRunning = true;
+    } else {
+        animationRunning = false;
+    }
 
-    /*on(canvas, "resize", function() {
+    /*on(document.body, "resize", function() {
         console.log("w : "+window.innerWidth + " h : " +window.innerHeight)
         canvas.style.width = window.innerWidth;
         canvas.style.height = window.innerHeight;
     });*/
 }
 
+/**
+ * @method stopButton : function used after a stop or erase event that will stop the function requestAnimationFrame()
+ */
+function stopButton() {
+    cancelAnimationFrame(raf);
+    raf = null;
+    animationRunning = false;
+}

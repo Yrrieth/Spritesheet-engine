@@ -32,6 +32,7 @@ var first = 1;
 // Put here the variables image
 var load;
 var scott;
+var blob;
 
 var imageWidth;
 var imageHeight;
@@ -41,7 +42,6 @@ var imageInput;
 var px = "px";
 
 function main() {
-    putElement();
-    
-    
+	putButton();
+    putCanvas();
 }
