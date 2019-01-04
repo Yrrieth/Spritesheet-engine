@@ -32,7 +32,7 @@ http://i.imgur.com/FDHsu.png
 
 ### [UPDATE 01/01/2019]
 
-This version can only used this image :
+This version can only use this image :
 
 (![Image of blob](http://2.bp.blogspot.com/--Vr6-kWHp0s/TorCoWHvu5I/AAAAAAAAAII/PpPQ2azjKeI/s1600/Blob_Walk.png)
 
