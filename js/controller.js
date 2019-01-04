@@ -117,11 +117,20 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
     return element;
 }
 
-function animate(imageObject) {
-    var moveSpeed = 1;
+/**
+ * @method update : function that will update the animation
+ * @param imageObject : the object SpriteSheet
+ *
+ * Change the value of the variable moveSpeed to change the speed of the movement perform by the keyboard event
+ */
+
+function update(imageObject) {
+    var moveSpeed = 5; 
+    var oldPositionX = imageObject.destinationX;
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(imageObject.image, imageObject.sourceX, imageObject.sourceY, imageObject.sourceWidth, imageObject.sourceHeight, imageObject.destinationX, imageObject.destinationY, imageObject.destinationWidth, imageObject.destinationHeight);
 
+    // The following lines correspond to the movement within the spritesheet and which sprite the function context.drawImage will show us
     // Reset everything
     if (imageObject.spriteX == imageObject.numberRow && imageObject.spriteY == imageObject.numberColumn) {
         imageObject.spriteX = 1;
@@ -130,25 +139,33 @@ function animate(imageObject) {
         imageObject.sourceY = 0;
     }
 
+    // Move horizontally
     if (imageObject.spriteY < imageObject.numberColumn) {
         imageObject.spriteY++;
         imageObject.sourceX += imageObject.sourceWidth;
-    } else {
+    } else { // Move vertically
         imageObject.spriteX++;
         imageObject.sourceY += imageObject.sourceHeight;
         imageObject.spriteY = 1;
         imageObject.sourceX = 0;
     }
 
+    // Keyboard event
     on(document.body, "keypress", (event) => {
-        var touche = event.key;
-        console.log("La touche appuyée est : " + touche + " destinationX : " + imageObject.destinationX)
+        console.log("oldPositionX : " + oldPositionX + " current position : " + imageObject.destinationX);
+        if (oldPositionX != imageObject.destinationX) { // If the old position is different from the current position, then we return
+            return;
+        } else {
+        var key = event.key;
+        console.log("La key appuyée est : " + key + " destinationX : " + imageObject.destinationX)
         console.log(performance.now() / 1000)
-        if (touche == 'd') {
-            imageObject.destinationX += moveSpeed;
-        }
-        if (touche == 'q') {
-            imageObject.destinationX -= moveSpeed;
+        if (imageObject.destinationX < canvas.width - imageObject.destinationWidth)
+            if (key == 'd')
+                imageObject.destinationX += moveSpeed;
+
+        if (imageObject.destinationX > 0)
+            if (key == 'q')
+                imageObject.destinationX -= moveSpeed;
         }
     })
 }
@@ -161,7 +178,7 @@ function frameloop(imageObject) {
     console.log("a")
     hideFrame = 1 - hideFrame; // 1 then 0 at each loop : 1 - 1 = 0 ; 1 - 0 = 1
     if (hideFrame == 0) {
-        animate(blob);
+        update(blob);
     }
     raf = requestAnimationFrame(frameloop)
     

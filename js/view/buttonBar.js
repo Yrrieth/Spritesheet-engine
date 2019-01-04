@@ -7,12 +7,12 @@ function putButton() {
     if (animationRunning == false) {
         on(input, "change", function() {
         	var fileList = input.files;
+            console.log(fileList.length + " fileList")
         	for(var i = 0; i < fileList.length; i++) {
         	    /*imageInput.title = fileList.name;
         	    imageInput.src = window.URL.createObjectURL(fileList[i]);
         	    imageInput.id = "image" + i;
                 */
-
 
                 var numRow = null;
                 while (numRow == null || isNaN(numRow)) {
@@ -45,7 +45,7 @@ function putButton() {
         });
     }
 
-    var start = newElement("button", document.body, "", "", 250, 5, "", {"position":"absolute"});
+    var start = newElement("button", document.body, "", "", 260, 5, "", {"position":"absolute"});
     start.innerHTML = "Start";
     on(start, "click", function() {
         if (animationRunning == false) {
@@ -54,13 +54,13 @@ function putButton() {
         }
     });
 
-    var stop = newElement("button", document.body, "", "", 300, 5, "", {"position":"absolute"});
+    var stop = newElement("button", document.body, "", "", 310, 5, "", {"position":"absolute"});
     stop.innerHTML = "Stop";
     on(stop, "click", function() {
         stopButton();    
     })
 
-    var erase = newElement("button", document.body, "", "", 350, 5, "", {"position":"absolute"});
+    var erase = newElement("button", document.body, "", "", 360, 5, "", {"position":"absolute"});
     erase.innerHTML = "Erase";
     on(erase, "click", function() {
         stopButton();
