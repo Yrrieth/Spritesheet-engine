@@ -3,8 +3,8 @@
  * @param source : the link of the image source
  * @param numberRow : the number of row of sprite in the spritesheet
  * @param numberColumn : the number of column of sprite in the spritesheet
- * @param sourceWidth : the width of 1 sprite of the spritesheet (see the commentary of the function getSizeAfterLoad() for more information)
- * @param sourceHeight : the height of 1 sprite of the spritesheet (see the commentary of the function getSizeAfterLoad() for more information)
+ * @param sourceWidth : the width of 1 sprite of the spritesheet (Watch the commentary of the function getSizeAfterLoad() for more information)
+ * @param sourceHeight : the height of 1 sprite of the spritesheet (Watch the commentary of the function getSizeAfterLoad() for more information)
  * @param destinationX : the coordinate X of the origin of the spritesheet in the canvas
  * @param destinationY : the coordinate Y of the origin of the spritesheet in the canvas
  * @param destinationWidth : the width of the spritesheet in the canvas
