@@ -1,3 +1,9 @@
+/**
+ * @method putButton : contains all the buttons
+ *
+ * This function is used to put different buttons allowing to start, stop or erase an animation in the canvas.
+ */
+
 function putButton() {
     var input = newElement("input", document.body, "", "", 5, 5, "", {"position":"absolute"});
     input.type = "file";

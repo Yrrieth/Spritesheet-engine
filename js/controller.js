@@ -1,3 +1,16 @@
+/**
+ * @construtor SpriteSheet : the object SpriteSheet which contains all the necessary informations of a spritesheet
+ * @param source : the link of the image source
+ * @param numberRow : the number of row of sprite in the spritesheet
+ * @param numberColumn : the number of column of sprite in the spritesheet
+ * @param sourceWidth : the width of 1 sprite of the spritesheet (see the commentary of the function getSizeAfterLoad() for more information)
+ * @param sourceHeight : the height of 1 sprite of the spritesheet (see the commentary of the function getSizeAfterLoad() for more information)
+ * @param destinationX : the coordinate X of the origin of the spritesheet in the canvas
+ * @param destinationY : the coordinate Y of the origin of the spritesheet in the canvas
+ * @param destinationWidth : the width of the spritesheet in the canvas
+ * @param destinationHeight : the height of the spritesheet in the canvas
+ */
+
 class SpriteSheet {
     constructor(source, numberRow, numberColumn, sourceWidth, sourceHeight, destinationX, destinationY, destinationWidth, destinationHeight) {
         this.image = document.createElement("img");       
@@ -9,9 +22,10 @@ class SpriteSheet {
         this.numberColumn = numberColumn;
 
         // A sprite is 1 image of a spritesheet
-        this.spriteX;
+        this.spriteX; // The number of the current sprite
         this.spriteY;
-        this.sourceX;
+
+        this.sourceX; // The coordinate X of the first sprite of the spritesheet
         this.sourceY;
         this.sourceWidth = sourceWidth;
         this.sourceHeight = sourceHeight;
@@ -28,9 +42,9 @@ class SpriteSheet {
  * @param imageObject : the object SpriteSheet
  *
  * The sourceWidth and sourceHeight property can only be obtained after the image have been loaded,
- * otherwise, the width and height will be 0.
- * So, firstly, sourceWidth and sourceHeight will take the size of the image source then,
- * those property will take the size of 1 sprite of the image after the function spriteSize() have been called.
+ * otherwise, the width and height will be always 0.
+ * So, firstly, sourceWidth and sourceHeight will temporarily take the size of the image source then,
+ * those properties will take the size of 1 sprite of the image after the function spriteSize() have been called.
  */
 
 function getSizeAfterLoad(imageObject) {
@@ -52,21 +66,14 @@ function getSizeAfterLoad(imageObject) {
     });
 }
 
-/*function resizeSprite(image) {
-    if (image.width > canvas.width || image.height > canvas.height) {
-	    var coefficientDeReduction = Math.max(image.width / canvas.width, image.height / canvas.height);
-	    Math.round(image.width /= coefficientDeReduction);
-	    Math.round(image.height /= coefficientDeReduction); 
-	}
-    //frameloop(image);
-    return image;
-}*/
-
 /**
  * @method spriteSize : calculate the size of 1 sprite from a spritesheet
  * @param image : the object SpriteSheet
- * @param numberRow : 
- * @param numberColumn :
+ * @param numberRow : the number of row of sprite in the spritesheet
+ * @param numberColumn : the number of column of sprite in the spritesheet
+ *
+ * When the function spriteSize() is called by the function getSizeAfterLoad(),
+ * the variables image.sourceWidth and image.sourceHeight have the size of the image source 
  */
 
 function spriteSize(image, numberRow, numberColumn) {
@@ -125,7 +132,7 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
  */
 
 function update(imageObject) {
-    var moveSpeed = 5; 
+    var moveSpeed = 6; 
     var oldPositionX = imageObject.destinationX;
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(imageObject.image, imageObject.sourceX, imageObject.sourceY, imageObject.sourceWidth, imageObject.sourceHeight, imageObject.destinationX, imageObject.destinationY, imageObject.destinationWidth, imageObject.destinationHeight);
@@ -151,7 +158,7 @@ function update(imageObject) {
     }
 
     // Keyboard event
-    on(document.body, "keypress", (event) => {
+    on(document.body, "keydown", (event) => {
         console.log("oldPositionX : " + oldPositionX + " current position : " + imageObject.destinationX);
         if (oldPositionX != imageObject.destinationX) { // If the old position is different from the current position, then we return
             return;
@@ -174,8 +181,16 @@ var raf = null; // requestAnimationFrame
 var hideFrame = 1; // variable boolean to have a animation at 30 fps
 var animationRunning = false // variable boolean used for the buttons
 
+/**
+ * @method frameloop : 
+ * @param imageObject : the object SpriteSheet
+ *
+ * Change the value of the variable moveSpeed to change the speed of the movement perform by the keyboard event.
+ * Change the parameter in the function update(), depending of your image
+ */
+
 function frameloop(imageObject) {
-    console.log("a")
+    console.log("loop")
     hideFrame = 1 - hideFrame; // 1 then 0 at each loop : 1 - 1 = 0 ; 1 - 0 = 1
     if (hideFrame == 0) {
         update(blob);
@@ -197,6 +212,8 @@ function frameloop(imageObject) {
 
 /**
  * @method stopButton : function used after a stop or erase event that will stop the function requestAnimationFrame()
+ *
+ * This function is only used for the buttons
  */
 function stopButton() {
     cancelAnimationFrame(raf);
