@@ -26,7 +26,7 @@ if (hideFrame == 0) {
 };
 ```
 
-- You can change the value of the speed of movement by changing the value of the variable moveSpeed in the function upadte().
+- You can change the value of the movement speed by changing the value of the variable moveSpeed in the function upadte().
 
 ***
 
