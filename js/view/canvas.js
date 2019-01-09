@@ -6,7 +6,7 @@
  */
 
 function putCanvas() {
-    canvas = newElement("canvas", document.body, window.innerWidth, window.innerHeight - 50, 0, 30, "", {"position":"absolute", "background":"#D0D0D0", "borderStyle":"dotted", "borderColor":"#B0B0B0"});
+    canvas = newElement("canvas", document.body, window.innerWidth - 10, window.innerHeight - 50, 0, 30, "", {"position":"absolute", "background":"#D0D0D0", "borderStyle":"dotted", "borderColor":"#B0B0B0"});
     document.body.appendChild(canvas);
     
     context = canvas.getContext("2d");

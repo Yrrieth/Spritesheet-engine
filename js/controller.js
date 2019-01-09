@@ -132,8 +132,6 @@ function newElement(element, parent, width, height, x, y, identifier, style) {
  */
 
 function update(imageObject) {
-    var moveSpeed = 6; 
-    var oldPositionX = imageObject.destinationX;
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(imageObject.image, imageObject.sourceX, imageObject.sourceY, imageObject.sourceWidth, imageObject.sourceHeight, imageObject.destinationX, imageObject.destinationY, imageObject.destinationWidth, imageObject.destinationHeight);
 
@@ -157,24 +155,7 @@ function update(imageObject) {
         imageObject.sourceX = 0;
     }
 
-    // Keyboard event
-    on(document.body, "keydown", (event) => {
-        console.log("oldPositionX : " + oldPositionX + " current position : " + imageObject.destinationX);
-        if (oldPositionX != imageObject.destinationX) { // If the old position is different from the current position, then we return
-            return;
-        } else {
-        var key = event.key;
-        console.log("La key appuyée est : " + key + " destinationX : " + imageObject.destinationX)
-        console.log(performance.now() / 1000)
-        if (imageObject.destinationX < canvas.width - imageObject.destinationWidth)
-            if (key == 'd')
-                imageObject.destinationX += moveSpeed;
-
-        if (imageObject.destinationX > 0)
-            if (key == 'q')
-                imageObject.destinationX -= moveSpeed;
-        }
-    })
+    
 }
 
 var raf = null; // requestAnimationFrame
@@ -194,6 +175,7 @@ function frameloop(imageObject) {
     hideFrame = 1 - hideFrame; // 1 then 0 at each loop : 1 - 1 = 0 ; 1 - 0 = 1
     if (hideFrame == 0) {
         update(blob);
+        //update(load)
     }
     raf = requestAnimationFrame(frameloop)
     
