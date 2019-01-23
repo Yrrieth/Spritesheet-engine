@@ -31,7 +31,6 @@ if (hideFrame == 0) {
 
 ### TO DO:
 
-- Understand why the image is "teleportating" in the canvas after a keyboard movement.
 - Put multiples images in the canvas and animate them all.
 - Able to put image in the input and animate it.
 
